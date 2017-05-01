@@ -1,0 +1,75 @@
+#!/usr/bin/expect
+set vcfIp [lindex $argv 0];
+spawn ssh -l vcf $vcfIp
+expect {
+        "yes/no" {
+                        send "yes\r"
+                        exp_continue
+                }
+                "ssword:" {
+                        send "test123\r"
+                }
+}
+expect "vcf@$vcfIp"
+send "docker exec -it vcf-mgr ps  auxx | grep root\r"
+expect "$expect_out(buffer)"
+send "
+spawn ssh -l root vcf-server-4
+expect {
+        "yes/no" {
+                        send "yes\r"
+                        exp_continue
+                }
+                "ssword:" {
+                        send "test123\r"
+                }
+}
+expect "root@vcf-server-4:"
+send "cd /etc/ansible/pluribus-ansible/ansible/playbooks/advance/playbooks\r"
+expect "root@vcf-server-4:"
+send "ansible-playbook -i hosts pn_switch_reset.yml -u pluribus --ask-pass --ask-vault-pass -K\r"
+expect "SSH password:"
+send "test123\r"
+expect "SUDO password"
+send "\r"
+expect "Vault password:"
+send "test123\r"
+expect "root@vcf-server-4:/etc/ansible/pluribus-ansible/ansible/playbooks/advance/playbooks#"
+send "\r"
+	
+	
+	
+	
+        
+        
+        
+        
+        
+        
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
